@@ -1,5 +1,5 @@
 import { Card } from '@material-ui/core'
-import { makeStyles } from '@material-ui/styles'
+import { makeStyles } from '@material-ui/core'
 import { Button, CardActions, CardContent, CardMedia, Container, Grid, Typography } from '@mui/material'
 import TemplateDefault from '../../src/templates/Default'
 
@@ -20,7 +20,9 @@ export default function Home() {
   const styles = useStyles()
 
   return (
+    
     <TemplateDefault>
+      
       <Container maxWidth="sm" className={styles.container}>
         <Typography component="h1" variant="h2" align="center">
           Meus Anuncios
