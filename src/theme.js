@@ -5,7 +5,12 @@ const theme = createTheme({
         primary:{
             main: '#000000',
         },
+        background:{
+            main:'rgb(242,244,245)',
+            white: 'red',
+        },
     },
+    
 })
 
 export default theme
