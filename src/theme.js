@@ -1,16 +1,19 @@
- import { createTheme } from "@material-ui/core/styles"
+import { createTheme } from "@material-ui/core/styles"
 
 const theme = createTheme({
     palette: {
-        primary:{
+        primary: {
             main: '#000000',
         },
-        background:{
-            main:'rgb(242,244,245)',
+        secondary: {
+            main: '#ffffff',
+        },
+        background: {
+            main: 'rgb(230,244,245)',
             white: 'red',
         },
     },
-    
+
 })
 
 export default theme
