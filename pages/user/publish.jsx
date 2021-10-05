@@ -136,7 +136,7 @@ export default function Publish() {
                 </Box>
             </Container>
 
-            <Container maxWidth="sm" className={style.boxContainer}>
+            <Container maxWidth="md" className={style.boxContainer}>
                 <Box className={style.box}>
                     <Typography variant="h5" content="h5" color="primary">
                         Imagens

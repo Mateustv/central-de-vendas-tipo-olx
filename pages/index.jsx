@@ -34,7 +34,7 @@ const Home = () => {
   return (
     <TemplateDefault>
       {/* TITULO PRINCIPAL */}
-      <Container maxWidth="sm" className={style.boxContainer}>
+      <Container maxWidth="lg" className={style.boxContainer}>
         <Typography component="h1" variant="h2" color="textPrimary">
           O que deseja encontrar ?
         </Typography>
@@ -49,7 +49,7 @@ const Home = () => {
         </Paper>
       </Container>
       {/* DESTAQUES */}
-      <Container maxWidth="sm" className={style.boxContainer}>
+      <Container maxWidth="md" className={style.boxContainer}>
         <Typography component="h2" variant="h3" color="textPrimary">
           Destaques
         </Typography>
