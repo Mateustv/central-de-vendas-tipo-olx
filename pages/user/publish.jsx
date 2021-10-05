@@ -1,6 +1,6 @@
-import { Button, FormControl, IconButton, InputAdornment, InputLabel, makeStyles, OutlinedInput, Select, TextField } from '@material-ui/core'
+import { FormControl, IconButton, InputAdornment, InputLabel, makeStyles, OutlinedInput, Select, TextField } from '@material-ui/core'
 import { DeleteForever } from '@material-ui/icons'
-import { Container, Typography } from '@mui/material'
+import { Button, Container, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import TemplateDefault from '../../src/templates/Default'
 import { useDropzone } from 'react-dropzone'
@@ -100,7 +100,6 @@ export default function Publish() {
 
     return (
         <TemplateDefault>
-
             <Container maxWidth="sm" className={style.container}>
                 <Typography variant="h2" content="h1" align="center" color="primary" >
                     Publicar Anúncios
@@ -253,7 +252,6 @@ export default function Publish() {
                     </Button>
                 </Box>
             </Container>
-
         </TemplateDefault>
     )
 }
