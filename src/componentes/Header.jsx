@@ -10,6 +10,9 @@ import { Menu } from '@mui/material'
 const useStyles = makeStyles((theme) => ({
   titleName: {
     marginLeft: 8,
+  },
+  noLink: {
+    cursor: 'pointer',
   }
 }))
 
@@ -24,9 +27,11 @@ export default function Header() {
       <AppBar position="static" elevation={3}>
         <Container maxWidth='lg'>
           <Toolbar>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              Anunx
-            </Typography>
+            <Link href="/">
+              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }} className={style.noLink}>
+                Anunx
+              </Typography>
+            </Link>
 
             <Link href="/user/publish" passHref>
               <Button color="inherit" variant="outlined" >

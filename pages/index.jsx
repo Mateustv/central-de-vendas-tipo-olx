@@ -15,8 +15,8 @@ import TemplateDefault from '../src/templates/Default'
 
 const useStyles = makeStyles((theme) => ({
   boxContainer: {
-    padding: theme.spacing(8, 10, 6),
     textAlign: 'center',
+    paddingBottom: theme.spacing(6)
   },
   boxSearch: {
     display: 'flex',

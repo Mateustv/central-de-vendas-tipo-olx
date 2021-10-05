@@ -9,9 +9,6 @@ import { useState } from 'react'
 const useStyles = makeStyles((theme) => ({
     mask: {},
     maskMain: {},
-    container: {
-        padding: theme.spacing(8, 0, 6),
-    },
     boxContainer: {
         marginBottom: theme.spacing(5)
     },
@@ -100,7 +97,7 @@ export default function Publish() {
 
     return (
         <TemplateDefault>
-            <Container maxWidth="sm" className={style.container}>
+            <Container maxWidth="sm">
                 <Typography variant="h2" content="h1" align="center" color="primary" >
                     Publicar Anúncios
                 </Typography>
