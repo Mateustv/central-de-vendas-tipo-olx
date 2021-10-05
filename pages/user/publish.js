@@ -1,4 +1,4 @@
-import { Button, IconButton, makeStyles, Select, TextField } from '@material-ui/core'
+import { Button, FormControl, IconButton, InputAdornment, InputLabel, makeStyles, OutlinedInput, Select, TextField } from '@material-ui/core'
 import { DeleteForever } from '@material-ui/icons'
 import { Container, Typography } from '@mui/material'
 import { Box } from '@mui/system'
@@ -194,6 +194,26 @@ export default function Publish() {
                         variant='outlined'
                         fullWidth
                     />
+                </Box>
+            </Container>
+
+            <Container maxWidth="md" className={style.boxContainer}>
+                <Box className={style.box}>
+                    <Typography variant="h5" content="h5" color="primary">
+                        Preço
+                    </Typography>
+                    <br />
+                    <FormControl fullWidth variant='outlined'>
+                        <InputLabel>
+                            Valor
+                        </InputLabel>
+                        <OutlinedInput
+                            onChange={() => { }}
+                            startAdornment={<InputAdornment position="start">R$</InputAdornment>}
+                            labelWidth={40}
+                        />
+                    </FormControl>
+
                 </Box>
             </Container>
 
