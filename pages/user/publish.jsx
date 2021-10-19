@@ -91,48 +91,31 @@ const validationShema = yup.object().shape({
     title: yup.string()
         .min(6, 'escreva um titulo maior')
         .max(100, 'Titulo muito grande')
-        .required('Campo obrigatário'),
+        .required('Campo obrigatório'),
     category: yup.string()
-        .required('Campo obrigatário'),
+        .required('Campo obrigatório'),
     description: yup.string()
-        .required('Campo obrigatário')
+        .required('Campo obrigatório')
         .min(20, 'Descrição minima de 20 caracteres'),
     price: yup.number()
-        .required('Campo obrigatário'),
+        .required('Campo obrigatório'),
     name: yup.string()
-        .required('Campo obrigatário'),
+        .required('Campo obrigatório'),
     email: yup.string()
         .email('digite um e-mail valido')
-        .required('Campo obrigatário'),
+        .required('Campo obrigatório'),
     phone: yup.number()
-        .required('Campo obrigatário'),
+        .required('Campo obrigatório'),
+    files: yup.array()
+        .min(1, 'Envie no mínimo uma foto')
+        .required('Campo obrigatório'),
 
 
 })
 
 export default function Publish() {
+
     const style = useStyles()
-    const [files, setFiles] = useState([])
-
-    const { getRootProps, getInputProps } = useDropzone({
-        accept: 'image/*',
-        onDrop: (acceptFile) => {
-            const newFiles = acceptFile.map(file => {
-                return Object.assign(file, {
-                    preview: URL.createObjectURL(file)
-                })
-            })
-            setFiles([
-                ...files,
-                ...newFiles])
-        }
-
-    })
-
-    const handleRemoveFile = fileName => {
-        const filesRemoves = files.filter(file => file.name !== fileName)
-        setFiles(filesRemoves)
-    }
 
     return (
         <TemplateDefault>
@@ -145,6 +128,7 @@ export default function Publish() {
                     name: '',
                     email: '',
                     phone: '',
+                    files: [],
                 }}
                 validationSchema={validationShema}
                 onSubmit={(values) => {
@@ -154,10 +138,33 @@ export default function Publish() {
                 {
                     ({
                         values,
+                        touched,
                         errors,
                         handleChange,
                         handleSubmit,
+                        setFieldValue,
                     }) => {
+
+                        const { getRootProps, getInputProps } = useDropzone({
+                            accept: 'image/*',
+                            onDrop: (acceptFile) => {
+                                const newFiles = acceptFile.map(file => {
+                                    return Object.assign(file, {
+                                        preview: URL.createObjectURL(file)
+                                    })
+                                })
+                                setFieldValue('files', [
+                                    ...values.files,
+                                    ...newFiles])
+                            }
+
+                        })
+
+                        const handleRemoveFile = fileName => {
+                            const filesRemoves = values.files.filter(file => file.name !== fileName)
+                            setFieldValue('files', filesRemoves)
+                        }
+
                         return (
                             <form onSubmit={handleSubmit}>
                                 <Container maxWidth="sm">
@@ -174,7 +181,7 @@ export default function Publish() {
                                         <Typography variant="h5" content="h5" color="primary">
                                             Titulo do anuncio
                                         </Typography>
-                                        <FormControl error={errors.title} fullWidth >
+                                        <FormControl error={errors.title && touched.title} fullWidth >
                                             <InputLabel>Ex.: Bicicleta aro 19</InputLabel>
                                             <Input
                                                 name='title'
@@ -182,14 +189,14 @@ export default function Publish() {
                                                 onChange={handleChange}
                                             />
                                             <FormHelperText>
-                                                {errors.title}
+                                                {errors.title && touched.title ? errors.title : null}
                                             </FormHelperText>
                                         </FormControl>
                                         <br /><br />
                                         <Typography variant="h5" content="h5" color="primary">
                                             Categorias
                                         </Typography>
-                                        <FormControl error={errors.category} fullWidth >
+                                        <FormControl error={errors.category && touched.category} fullWidth >
                                             <Select
                                                 name='category'
                                                 value={values.category}
@@ -200,12 +207,12 @@ export default function Publish() {
                                                 <MenuItem value={"Agricultura"}>Agricultura</MenuItem>
                                                 <MenuItem value={"Moda"}>Moda</MenuItem>
                                                 <MenuItem value={"Carros"}>Carros</MenuItem>
-                                                <MenuItem value={"Imovei"}>Imovei</MenuItem>
-                                                <MenuItem value={"Esporte"}>Esporte</MenuItem>
+                                                <MenuItem value={"Imóveis"}>Imóveis</MenuItem>
+                                                <MenuItem value={"Esportes"}>Esportes</MenuItem>
                                                 <MenuItem value={"Emprego"}>Emprego</MenuItem>
                                             </Select>
                                             <FormHelperText>
-                                                {errors.category}
+                                                {errors.category && touched.category ? errors.category : null}
                                             </FormHelperText>
                                         </FormControl>
                                     </Box>
@@ -216,18 +223,23 @@ export default function Publish() {
                                         <Typography variant="h5" content="h5" color="primary">
                                             Imagens
                                         </Typography>
-                                        <Typography variant="div" content="body2" color="primary">
+                                        <Typography variant="div" content="body2" color={errors.files && touched.files ? 'error' : "primary"}>
                                             A primeira imagem é a foto principal do seu anuncio
                                         </Typography>
+                                        {
+                                            errors.files && touched.files
+                                                ? <Typography variant="body2" color="error" gutterBottom>{errors.files}</Typography>
+                                                : null
+                                        }
                                         <Box className={style.thumbsContainer}>
                                             <Box className={style.dropzone} {...getRootProps()}>
-                                                <input {...getInputProps()} />
-                                                <Typography >
+                                                <input name='files' {...getInputProps()} />
+                                                <Typography color={errors.files && touched.files ? 'error' : "primary"} >
                                                     Clique para adicionar ou arraste a imagem para aqui
                                                 </Typography>
                                             </Box>
                                             {
-                                                files.map((file, index) => (
+                                                values.files.map((file, index) => (
                                                     <Box
                                                         key={file.name}
                                                         className={style.thumb}
@@ -262,7 +274,7 @@ export default function Publish() {
                                         <Typography variant="div" content="body2" color="primary">
                                             Escreva os detalhes do que esta vendendo
                                         </Typography>
-                                        <FormControl error={errors.description} fullWidth >
+                                        <FormControl error={errors.description && touched.description} fullWidth >
                                             <Input
                                                 name="description"
                                                 multiline
@@ -271,7 +283,7 @@ export default function Publish() {
                                                 onChange={handleChange}
                                             />
                                             <FormHelperText>
-                                                {errors.description}
+                                                {errors.description && touched.description ? errors.description : null}
                                             </FormHelperText>
                                         </FormControl>
                                     </Box>
@@ -283,7 +295,7 @@ export default function Publish() {
                                             Preço
                                         </Typography>
                                         <br />
-                                        <FormControl fullWidth error={errors.price} >
+                                        <FormControl fullWidth error={errors.price && touched.price} >
                                             <InputLabel>
                                                 Valor
                                             </InputLabel>
@@ -294,16 +306,16 @@ export default function Publish() {
                                                 labelWidth={40}
                                             />
                                             <FormHelperText>
-                                                {errors.price}
+                                                {errors.price && touched.price ? errors.price : null}
                                             </FormHelperText>
                                         </FormControl>
 
                                     </Box>
                                 </Container>
-                                {/* DADOS DE CONTATOS */}
+                                {/* DADOS DE CONTADOS */}
                                 <Container maxWidth="md" className={style.boxContainer}>
                                     <Box className={style.box}>
-                                        <FormControl error={errors.name} fullWidth >
+                                        <FormControl error={errors.name && touched.name} fullWidth >
                                             <InputLabel>Nome</InputLabel>
                                             <Input
                                                 name='name'
@@ -311,10 +323,10 @@ export default function Publish() {
                                                 onChange={handleChange}
                                             />
                                             <FormHelperText>
-                                                {errors.name}
+                                                {errors.name && touched.name ? errors.name : null}
                                             </FormHelperText>
                                         </FormControl>
-                                        <FormControl error={errors.email} fullWidth >
+                                        <FormControl error={errors.email && touched.email} fullWidth >
                                             <InputLabel>E-mail</InputLabel>
                                             <Input
                                                 name='email'
@@ -322,10 +334,10 @@ export default function Publish() {
                                                 onChange={handleChange}
                                             />
                                             <FormHelperText>
-                                                {errors.email}
+                                                {errors.email && touched.email ? errors.email : null}
                                             </FormHelperText>
                                         </FormControl>
-                                        <FormControl error={errors.phone} fullWidth >
+                                        <FormControl error={errors.phone && touched.phone} fullWidth >
                                             <InputLabel>Telefone</InputLabel>
                                             <Input
                                                 name='phone'
@@ -333,7 +345,7 @@ export default function Publish() {
                                                 onChange={handleChange}
                                             />
                                             <FormHelperText>
-                                                {errors.phone}
+                                                {errors.phone && touched.phone ? errors.phone : null}
                                             </FormHelperText>
                                         </FormControl>
                                     </Box>
