@@ -2,7 +2,7 @@ import { Container, Grid, Typography, makeStyles, Chip, CardHeader, CardMedia, A
 import { Card } from '@mui/material'
 import { Box } from '@mui/system'
 import Carousel from 'react-material-ui-carousel'
-import TemplateDefault from '../src/templates/Default'
+import TemplateDefault from '../../src/templates/Default'
 
 const useStyles = makeStyles((theme) => ({
   box: {
