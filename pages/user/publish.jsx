@@ -1,10 +1,14 @@
+import { useState } from 'react'
+import { useDropzone } from 'react-dropzone'
+import * as yup from 'yup'
+import { Formik } from 'formik'
+
 import { FormControl, IconButton, InputAdornment, InputLabel, makeStyles, OutlinedInput, Select, TextField } from '@material-ui/core'
 import { DeleteForever } from '@material-ui/icons'
 import { Button, Container, Typography } from '@mui/material'
 import { Box } from '@mui/system'
+
 import TemplateDefault from '../../src/templates/Default'
-import { useDropzone } from 'react-dropzone'
-import { useState } from 'react'
 
 const useStyles = makeStyles((theme) => ({
     mask: {},
@@ -71,6 +75,14 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
+const validetionShema = yup.object().shape({
+    title: yup.string()
+        .min(6, 'escreva um titulo maior')
+        .max(100, 'Titulo muito grande')
+        .required('Campo obrigatario'),
+
+})
+
 export default function Publish() {
     const style = useStyles()
     const [files, setFiles] = useState([])
@@ -97,158 +109,186 @@ export default function Publish() {
 
     return (
         <TemplateDefault>
-            <Container maxWidth="sm">
-                <Typography variant="h2" content="h1" align="center" color="primary" >
-                    Publicar Anúncios
-                </Typography>
-                <Typography variant="h5" content="h2" align="center" color="primary">
-                    Quanto mais detalhado melhor
-                </Typography>
-            </Container>
+            <Formik
+                initialValues={{
+                    title: '',
+                }}
+                validationSchema={validetionShema}
+                onSubmit={(values) => {
+                    console.log(values)
+                }}
+            >
+                {
+                    ({
+                        values,
+                        errors,
+                        handleChange,
+                        handleSubmit,
+                    }) => {
+                        return (
+                            <form onSubmit={handleSubmit}>
+                                <Container maxWidth="sm">
+                                    <Typography variant="h2" content="h1" align="center" color="primary" >
+                                        Publicar Anúncios
+                                    </Typography>
+                                    <Typography variant="h5" content="h2" align="center" color="primary">
+                                        Quanto mais detalhado melhor
+                                    </Typography>
+                                </Container>
 
-            <Container maxWidth="md" className={style.boxContainer}>
-                <Box className={style.box}>
-                    <Typography variant="h5" content="h5" color="primary">
-                        Titulo do anuncio
-                    </Typography>
-                    <TextField
-                        label="Ex.: Bicicleta aro 19"
-                        size="small"
-                        fullWidth
-                    />
-                    <br /><br />
-                    <Typography variant="h5" content="h5" color="primary">
-                        Categorias
-                    </Typography>
-                    <Select native value='' fullWidth onChange={() => { }} inputProps={{ name: 'age', }}>
-                        <option value=''>Selecione</option>
-                        <option value={1}>testes</option>
-                        <option value={2}>testes</option>
-                        <option value={2}>testes</option>
-                        <option value={3}>testes</option>
-                        <option value={3}>testes</option>
-                        <option value={3}>testes</option>
-                        <option value={3}>testes</option>
-                    </Select>
-                </Box>
-            </Container>
+                                <Container maxWidth="md" className={style.boxContainer}>
+                                    <Box className={style.box}>
+                                        <Typography variant="h5" content="h5" color="primary">
+                                            Titulo do anuncio
+                                        </Typography>
+                                        <TextField
+                                            name='title'
+                                            value={values.title}
+                                            onChange={handleChange}
+                                            label="Ex.: Bicicleta aro 19"
+                                            size="small"
+                                            fullWidth
+                                            errors={errors.title}
+                                            helperText={errors.title}
+                                        />
+                                        <br /><br />
+                                        <Typography variant="h5" content="h5" color="primary">
+                                            Categorias
+                                        </Typography>
+                                        <Select native value='' fullWidth onChange={() => { }} inputProps={{ name: 'age', }}>
+                                            <option value=''>Selecione</option>
+                                            <option value={1}>testes</option>
+                                            <option value={2}>testes</option>
+                                            <option value={2}>testes</option>
+                                            <option value={3}>testes</option>
+                                            <option value={3}>testes</option>
+                                            <option value={3}>testes</option>
+                                            <option value={3}>testes</option>
+                                        </Select>
+                                    </Box>
+                                </Container>
 
-            <Container maxWidth="md" className={style.boxContainer}>
-                <Box className={style.box}>
-                    <Typography variant="h5" content="h5" color="primary">
-                        Imagens
-                    </Typography>
-                    <Typography variant="div" content="body2" color="primary">
-                        A primeira imagem é a foto principal do seu anuncio
-                    </Typography>
-                    <Box className={style.thumbsContainer}>
-                        <Box className={style.dropzone} {...getRootProps()}>
-                            <input {...getInputProps()} />
-                            <Typography >
-                                Clique para adicionar ou arraste a imagem para aqui
-                            </Typography>
-                        </Box>
-                        {
-                            files.map((file, index) => (
-                                <Box
-                                    key={file.name}
-                                    className={style.thumb}
-                                    style={{ backgroundImage: `url(${file.preview})` }}
-                                >
-                                    {
-                                        index === 0 ?
-                                            <Box className={style.maskMain}>
-                                                <Typography variant="body" color='secondary'>
-                                                    Principal
+                                <Container maxWidth="md" className={style.boxContainer}>
+                                    <Box className={style.box}>
+                                        <Typography variant="h5" content="h5" color="primary">
+                                            Imagens
+                                        </Typography>
+                                        <Typography variant="div" content="body2" color="primary">
+                                            A primeira imagem é a foto principal do seu anuncio
+                                        </Typography>
+                                        <Box className={style.thumbsContainer}>
+                                            <Box className={style.dropzone} {...getRootProps()}>
+                                                <input {...getInputProps()} />
+                                                <Typography >
+                                                    Clique para adicionar ou arraste a imagem para aqui
                                                 </Typography>
                                             </Box>
-                                            : null
-                                    }
-                                    <Box className={style.mask}>
-                                        <IconButton color="secondary" onClick={() => { handleRemoveFile(file.name) }}>
-                                            <DeleteForever fontSize="large" />
-                                        </IconButton>
+                                            {
+                                                files.map((file, index) => (
+                                                    <Box
+                                                        key={file.name}
+                                                        className={style.thumb}
+                                                        style={{ backgroundImage: `url(${file.preview})` }}
+                                                    >
+                                                        {
+                                                            index === 0 ?
+                                                                <Box className={style.maskMain}>
+                                                                    <Typography variant="body" color='secondary'>
+                                                                        Principal
+                                                                    </Typography>
+                                                                </Box>
+                                                                : null
+                                                        }
+                                                        <Box className={style.mask}>
+                                                            <IconButton color="secondary" onClick={() => { handleRemoveFile(file.name) }}>
+                                                                <DeleteForever fontSize="large" />
+                                                            </IconButton>
+                                                        </Box>
+                                                    </Box>
+                                                ))
+                                            }
+                                        </Box>
                                     </Box>
-                                </Box>
-                            ))
-                        }
-                    </Box>
-                </Box>
-            </Container>
+                                </Container>
 
-            <Container maxWidth="md" className={style.boxContainer}>
-                <Box className={style.box}>
-                    <Typography variant="h5" content="h5" color="primary">
-                        Discrição
-                    </Typography>
-                    <Typography variant="div" content="body2" color="primary">
-                        Escreva os detalhes do que esta vendendo
-                    </Typography>
-                    <TextField
-                        multiline
-                        rows={6}
-                        variant='outlined'
-                        fullWidth
-                    />
-                </Box>
-            </Container>
+                                <Container maxWidth="md" className={style.boxContainer}>
+                                    <Box className={style.box}>
+                                        <Typography variant="h5" content="h5" color="primary">
+                                            Discrição
+                                        </Typography>
+                                        <Typography variant="div" content="body2" color="primary">
+                                            Escreva os detalhes do que esta vendendo
+                                        </Typography>
+                                        <TextField
+                                            multiline
+                                            rows={6}
+                                            variant='outlined'
+                                            fullWidth
+                                        />
+                                    </Box>
+                                </Container>
 
-            <Container maxWidth="md" className={style.boxContainer}>
-                <Box className={style.box}>
-                    <Typography variant="h5" content="h5" color="primary">
-                        Preço
-                    </Typography>
-                    <br />
-                    <FormControl fullWidth variant='outlined'>
-                        <InputLabel>
-                            Valor
-                        </InputLabel>
-                        <OutlinedInput
-                            onChange={() => { }}
-                            startAdornment={<InputAdornment position="start">R$</InputAdornment>}
-                            labelWidth={40}
-                        />
-                    </FormControl>
+                                <Container maxWidth="md" className={style.boxContainer}>
+                                    <Box className={style.box}>
+                                        <Typography variant="h5" content="h5" color="primary">
+                                            Preço
+                                        </Typography>
+                                        <br />
+                                        <FormControl fullWidth variant='outlined'>
+                                            <InputLabel>
+                                                Valor
+                                            </InputLabel>
+                                            <OutlinedInput
+                                                onChange={() => { }}
+                                                startAdornment={<InputAdornment position="start">R$</InputAdornment>}
+                                                labelWidth={40}
+                                            />
+                                        </FormControl>
 
-                </Box>
-            </Container>
+                                    </Box>
+                                </Container>
 
-            <Container maxWidth="md" className={style.boxContainer}>
-                <Box className={style.box}>
-                    <Typography variant="h5" content="h5" color="primary" gutterBottom>
-                        Discrição
-                    </Typography>
-                    <TextField
-                        label="Nome"
-                        size="small"
-                        variant='outlined'
-                        fullWidth
-                        className={style.descriptionTextField}
-                    />
-                    <TextField
-                        label="Email"
-                        size="small"
-                        variant='outlined'
-                        fullWidth
-                        className={style.descriptionTextField}
-                    />
-                    <TextField
-                        label="Telefone"
-                        size="small"
-                        variant='outlined'
-                        fullWidth
-                        className={style.descriptionTextField}
-                    />
-                </Box>
-            </Container>
+                                <Container maxWidth="md" className={style.boxContainer}>
+                                    <Box className={style.box}>
+                                        <Typography variant="h5" content="h5" color="primary" gutterBottom>
+                                            Discrição
+                                        </Typography>
+                                        <TextField
+                                            label="Nome"
+                                            size="small"
+                                            variant='outlined'
+                                            fullWidth
+                                            className={style.descriptionTextField}
+                                        />
+                                        <TextField
+                                            label="Email"
+                                            size="small"
+                                            variant='outlined'
+                                            fullWidth
+                                            className={style.descriptionTextField}
+                                        />
+                                        <TextField
+                                            label="Telefone"
+                                            size="small"
+                                            variant='outlined'
+                                            fullWidth
+                                            className={style.descriptionTextField}
+                                        />
+                                    </Box>
+                                </Container>
 
-            <Container maxWidth="md" className={style.boxContainer}>
-                <Box textAlign="center">
-                    <Button variant="contained" size="large" color="primary">
-                        Publicar Anuncio
-                    </Button>
-                </Box>
-            </Container>
+                                <Container maxWidth="md" className={style.boxContainer}>
+                                    <Box textAlign="center">
+                                        <Button type="submit" variant="contained" size="large" color="primary">
+                                            Publicar Anuncio
+                                        </Button>
+                                    </Box>
+                                </Container>
+                            </form>
+                        )
+                    }
+                }
+            </Formik>
         </TemplateDefault>
     )
 }
