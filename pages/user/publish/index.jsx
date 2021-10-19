@@ -1,6 +1,4 @@
-import { useState } from 'react'
 import { useDropzone } from 'react-dropzone'
-import * as yup from 'yup'
 import { Formik } from 'formik'
 
 import {
@@ -10,108 +8,18 @@ import {
     InputAdornment,
     Input,
     InputLabel,
-    makeStyles,
     MenuItem,
-    OutlinedInput,
     Select,
-    TextField
 } from '@material-ui/core'
-import { DeleteForever, ErrorSharp } from '@material-ui/icons'
+import { DeleteForever } from '@material-ui/icons'
 import { Button, Container, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 
-import TemplateDefault from '../../src/templates/Default'
-
-const useStyles = makeStyles((theme) => ({
-    mask: {},
-    maskMain: {},
-    boxContainer: {
-        marginBottom: theme.spacing(5)
-    },
-    box: {
-        backgroundColor: 'white',
-        padding: theme.spacing(6),
-        borderRadius: '5px',
-    },
-    descriptionTextField: {
-        marginBottom: theme.spacing(2)
-    },
-    thumbsContainer: {
-        display: 'flex',
-        margin: 15,
-        flexWrap: 'wrap',
-    },
-    dropzone: {
-        display: 'flex',
-        cursor: 'pointer',
-        justifyContent: 'center',
-        alignItems: 'center',
-        textAlign: 'center',
-        padding: 10,
-        margin: '0 15px 15px 0',
-        width: 250,
-        height: 150,
-        backgroundColor: theme.palette.background.default,
-        border: '2px dashed black',
-    },
-    thumb: {
-        width: 250,
-        height: 150,
-        margin: '0 15px 15px 0',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center center',
-        position: 'relative',
-
-        '& $maskMain': {
-            backgroundColor: 'blue',
-            padding: '6px 10px',
-            position: 'absolute',
-            bottom: 0,
-            left: 0,
-        },
-
-        '&:hover $mask': {
-            display: 'flex',
-        },
-
-        '& $mask': {
-            display: 'none',
-            justifyContent: 'center',
-            alignItems: 'center',
-            textAlign: 'center',
-            backgroundColor: 'rgba(0,0,0,0.5)',
-            width: '100%',
-            height: '100%',
-        }
-
-    }
-}))
-
-const validationShema = yup.object().shape({
-    title: yup.string()
-        .min(6, 'escreva um titulo maior')
-        .max(100, 'Titulo muito grande')
-        .required('Campo obrigatório'),
-    category: yup.string()
-        .required('Campo obrigatório'),
-    description: yup.string()
-        .required('Campo obrigatório')
-        .min(20, 'Descrição minima de 20 caracteres'),
-    price: yup.number()
-        .required('Campo obrigatório'),
-    name: yup.string()
-        .required('Campo obrigatório'),
-    email: yup.string()
-        .email('digite um e-mail valido')
-        .required('Campo obrigatório'),
-    phone: yup.number()
-        .required('Campo obrigatório'),
-    files: yup.array()
-        .min(1, 'Envie no mínimo uma foto')
-        .required('Campo obrigatório'),
+import TemplateDefault from '../../../src/templates/Default'
+import useStyles from './style'
+import { initialValues, validationSchema } from './formValues'
 
 
-})
 
 export default function Publish() {
 
@@ -120,17 +28,8 @@ export default function Publish() {
     return (
         <TemplateDefault>
             <Formik
-                initialValues={{
-                    title: '',
-                    category: '',
-                    description: '',
-                    price: '',
-                    name: '',
-                    email: '',
-                    phone: '',
-                    files: [],
-                }}
-                validationSchema={validationShema}
+                initialValues={initialValues}
+                validationSchema={validationSchema}
                 onSubmit={(values) => {
                     console.log(values)
                 }}
