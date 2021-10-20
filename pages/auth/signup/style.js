@@ -17,6 +17,11 @@ const useStyles = makeStyles((theme) => ({
   },
   error: {
     color: 'red',
+  },
+  circularProgress: {
+    display: 'block',
+    margin: "7px auto",
+    color: 'black',
   }
 }))
 
