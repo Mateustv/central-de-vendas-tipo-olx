@@ -1,5 +1,6 @@
 import { Formik } from 'formik'
 import axios from 'axios'
+import { useRouter } from 'next/router'
 
 import { Button, CircularProgress, Container, FormControl, FormHelperText, Input, InputLabel, Typography } from '@material-ui/core'
 import { Box } from '@mui/system'
@@ -11,6 +12,7 @@ import useToasty from '../../../src/contexts/Toasty'
 
 const Signup = () => {
   const style = useStyles()
+  const router = useRouter()
   const { setToasty } = useToasty()
 
   const handleFormSubmit = async (values) => {
@@ -23,6 +25,7 @@ const Signup = () => {
         severity: 'success',
         text: 'Cadastro realizado com sucesso',
       })
+      router.push('/auth/signin')
     }
   }
 

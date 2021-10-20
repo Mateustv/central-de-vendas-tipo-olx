@@ -1,11 +1,8 @@
 import nextConnect from 'next-connect'
-import { get, post } from '../../src/controllers/users'
+import { post } from '../../../src/controllers/auth/signin'
 
 const router = nextConnect()
 
-router.get(get)
-
 router.post(post)
-
 
 export default router
