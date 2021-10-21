@@ -5,7 +5,7 @@ import ProductsModels from "../models/products"
 import dbConnect from '../utils/dbConnect'
 
 const post = async (req, res) => {
-  // await dbConnect()
+  await dbConnect()
 
   const form = new formidable.IncomingForm({
     multiples: true,
@@ -13,7 +13,7 @@ const post = async (req, res) => {
     keepExtensions: true,
   })
 
-  form.parse(req, (error, fields, data) => {
+  form.parse(req, async (error, fields, data) => {
     if (error) {
       return res.status(500).json({ success: false })
     }
@@ -21,6 +21,8 @@ const post = async (req, res) => {
     const { files } = data
 
     const renameFiles = files instanceof Array ? files : [files]
+
+    const filesToSave = []
 
     renameFiles.forEach(file => {
       const timestamp = Date.now()
@@ -32,6 +34,11 @@ const post = async (req, res) => {
       const oldPath = path.join(__dirname, '../../../../' + file.path)
       const newPath = path.join(__dirname, '../../../../' + form.uploadDir + '/' + fileName)
 
+      filesToSave.push({
+        name: fileName,
+        path: newPath,
+      })
+
       fs.rename(oldPath, newPath, (error) => {
         if (error) {
           console.log(error)
@@ -41,7 +48,39 @@ const post = async (req, res) => {
 
     })
 
-    res.status(200).json({ success: true })
+    const {
+      title,
+      category,
+      description,
+      price,
+      name,
+      email,
+      phone,
+      userId,
+      image,
+    } = fields
+
+    const product = new ProductsModels({
+      title,
+      category,
+      description,
+      price,
+      user: {
+        id: userId,
+        name,
+        email,
+        phone,
+        image,
+      },
+      files: filesToSave
+    })
+
+    const register = await product.save()
+    if (register) {
+      res.status(201).json({ success: true })
+    } else {
+      res.status(500).json({ success: false })
+    }
   })
 }
 

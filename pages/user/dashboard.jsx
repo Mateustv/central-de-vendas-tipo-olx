@@ -2,6 +2,7 @@ import { makeStyles } from '@material-ui/core'
 import { Button, Container, Grid, Typography } from '@mui/material'
 import TemplateDefault from '../../src/templates/Default'
 import Card from '../../src/componentes/Card'
+import { formatCurrency } from '../../src/utils/currency'
 
 const useStyles = makeStyles((theme) => ({
   buttonAdd: {
@@ -30,7 +31,7 @@ export default function Home() {
             <Card
               image={'http://source.unsplash.com/random'}
               title="Produdo X"
-              subtitle="R$ 60,00"
+              subtitle={formatCurrency(60)}
               buttons={
                 <>
                   <Button size="small" color="primary">

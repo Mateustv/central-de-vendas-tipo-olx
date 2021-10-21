@@ -21,13 +21,20 @@ import TemplateDefault from '../../../src/templates/Default'
 import useStyles from './style'
 import { initialValues, validationSchema } from './formValues'
 import useToasty from '../../../src/contexts/Toasty'
+import { getSession } from 'next-auth/client'
 
 
 
-export default function Publish() {
+export default function Publish({ userId, image }) {
     const style = useStyles()
     const { setToasty } = useToasty()
     const router = useRouter()
+
+    const formValues = {
+        ...initialValues
+    }
+    formValues.userId = userId
+    formValues.image = image
 
     const handleSuccess = () => {
         setToasty({
@@ -65,7 +72,7 @@ export default function Publish() {
     return (
         <TemplateDefault>
             <Formik
-                initialValues={initialValues}
+                initialValues={formValues}
                 validationSchema={validationSchema}
                 onSubmit={handleFormSubmit}
             >
@@ -101,6 +108,8 @@ export default function Publish() {
 
                         return (
                             <form onSubmit={handleSubmit}>
+                                <Input type="hidden" name="useId" value={values.userId} />
+                                <Input type="hidden" name="image" value={values.image} />
                                 <Container maxWidth="sm">
                                     <Typography variant="h2" content="h1" align="center" color="primary" >
                                         Publicar Anúncios
@@ -299,4 +308,15 @@ export default function Publish() {
             </Formik>
         </TemplateDefault>
     )
+}
+
+export async function getServerSideProps({ req }) {
+    const { userId, user } = await getSession({ req })
+
+    return {
+        props: {
+            userId,
+            image: user.image,
+        }
+    }
 }
