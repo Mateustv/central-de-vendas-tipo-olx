@@ -18,6 +18,7 @@
     "@mui/material": "^5.0.1",
     "axios": "^0.23.0",
     "bcrypt": "^5.0.1",
+    "formidable-serverless": "^1.1.1",
     "formik": "^2.2.9",
     "mongoose": "^6.0.11",
     "next": "11.1.2",

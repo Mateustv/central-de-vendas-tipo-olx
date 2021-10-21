@@ -9,7 +9,6 @@ import { Box } from '@mui/system'
 import TemplateDefault from '../../../src/templates/Default'
 import useStyles from './style'
 import { validationSchema, initialValues } from './formValues'
-import useToasty from '../../../src/contexts/Toasty'
 import { Alert } from '@mui/material'
 
 const Signin = () => {

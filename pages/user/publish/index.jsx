@@ -1,5 +1,7 @@
 import { useDropzone } from 'react-dropzone'
 import { Formik } from 'formik'
+import axios from 'axios'
+import { useRouter } from 'next/router'
 
 import {
     FormControl,
@@ -18,21 +20,54 @@ import { Box } from '@mui/system'
 import TemplateDefault from '../../../src/templates/Default'
 import useStyles from './style'
 import { initialValues, validationSchema } from './formValues'
+import useToasty from '../../../src/contexts/Toasty'
 
 
 
 export default function Publish() {
-
     const style = useStyles()
+    const { setToasty } = useToasty()
+    const router = useRouter()
+
+    const handleSuccess = () => {
+        setToasty({
+            open: true,
+            text: 'Anuncio cadastrado com sucesso',
+            severity: 'success',
+        })
+        // router.push('/user/dashboard')
+    }
+    const handleError = () => {
+        setToasty({
+            open: true,
+            text: 'Anuncio não cadastrado, ocorreu algum erro',
+            severity: 'success',
+        })
+    }
+
+    const handleFormSubmit = (values) => {
+        const formData = new FormData()
+
+        for (let field in values) {
+            if (field === 'files') {
+                values.files.forEach(file => {
+                    formData.append('files', file)
+                })
+            } else {
+                formData.append(field, values[field])
+            }
+        }
+        axios.post('/api/products', formData)
+            .then(handleSuccess)
+            .catch(handleError)
+    }
 
     return (
         <TemplateDefault>
             <Formik
                 initialValues={initialValues}
                 validationSchema={validationSchema}
-                onSubmit={(values) => {
-                    console.log(values)
-                }}
+                onSubmit={handleFormSubmit}
             >
                 {
                     ({
