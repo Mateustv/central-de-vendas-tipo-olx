@@ -99,7 +99,7 @@ const Signup = () => {
                     </FormControl>
                     {/* CONFIRMAR SENHA */}
                     <FormControl fullWidth errors={errors.passwordConf && touched.passwordConf} className={style.formControl}>
-                      <InputLabel className={style.inputLabel}>Senha</InputLabel>
+                      <InputLabel className={style.inputLabel}>Confirme sua senha</InputLabel>
                       <Input
                         name="passwordConf"
                         type="password"

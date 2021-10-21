@@ -1,16 +1,23 @@
 import axios from "axios"
 import NextAuth from "next-auth"
-import CredentialsProvider from 'next-auth/providers/credentials'
+import Providers from "next-auth/providers"
+import GoogleProvider from 'next-auth/providers/google'
 
 export default NextAuth({
-  // Configure one or more authentication providers
   providers: [
-    CredentialsProvider({
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET
+    }),
+    Providers.Credentials({
       name: 'Credentials',
       async authorize(credentials) {
-        const res = axios.post('http://localhost:3000/api/auth/signin', credentials)
+        const url = 'http://localhost:3000/api/auth/signin'
+        const res = await axios.post(url, credentials)
+
         const user = res.data
-        if (user) {
+
+        if (res) {
           return user
         } else {
           throw '/auth/signin?i=1'

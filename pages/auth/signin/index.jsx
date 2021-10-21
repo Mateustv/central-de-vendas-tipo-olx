@@ -1,7 +1,7 @@
 import { Formik } from 'formik'
-import axios from 'axios'
+import Image from 'next/image'
 import { useRouter } from 'next/router'
-import { signIn } from "next-auth/client"
+import { signIn, useSession } from "next-auth/client"
 
 import { Button, CircularProgress, Container, FormControl, FormHelperText, Input, InputLabel, Typography } from '@material-ui/core'
 import { Box } from '@mui/system'
@@ -15,9 +15,16 @@ import { Alert } from '@mui/material'
 const Signin = () => {
   const style = useStyles()
   const router = useRouter()
-  const { setToasty } = useToasty()
+  const [session] = useSession()
+  console.log(session)
 
-  const handleFormSubmit = async (values) => {
+  const handleGoogleSignIn = () => {
+    signIn('google', {
+      callbackUrl: 'http://localhost:3000/user/dashboard',
+    })
+  }
+
+  const handleFormSubmit = (values) => {
     signIn('Credentials', {
       email: values.email,
       password: values.password,
@@ -36,6 +43,28 @@ const Signin = () => {
       {/* CAMPO DE CADASTRO */}
       <Container maxWidth='md'>
         <Box className={style.box}>
+          <Box display="flex" justifyContent="center">
+            <Button
+              variant="contained"
+              className={style.buttonGoogle}
+              startIcon={
+                <Image
+                  src="/imagens/googleLogo.svg"
+                  width={20}
+                  height={20}
+                  alt="Google"
+                />
+              }
+              onClick={handleGoogleSignIn}
+            >
+              Entrar com Google
+            </Button>
+          </Box>
+
+          <Box className={style.boxSeparator}>
+            <span> ou </span>
+          </Box>
+
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}

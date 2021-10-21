@@ -26,6 +26,24 @@ const useStyles = makeStyles((theme) => ({
   alertError: {
     margin: '20px 0',
   },
+  boxSeparator: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#e8e8e8',
+    width: '100%',
+    height: 1,
+    margin: theme.spacing(7, 0, 4),
+
+    '& span': {
+      backgroundColor: 'white',
+      padding: '0 30px',
+    }
+  },
+  buttonGoogle: {
+    color: 'white',
+    backgroundColor: 'black'
+  },
 }))
 
 export default useStyles
